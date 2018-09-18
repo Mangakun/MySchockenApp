@@ -57,6 +57,7 @@ public class ObserververImpl implements Observer, PlayerCallBack{
      * This method decides the continuing.
      */
     private void end(){
+        // TODO: steine verteilen
         // TODO: wenn looser 13 Steine hat -> Spiel für nächste Runde
         // TODO: wenn Looser 13 Steine hat und noch nicht alle Hälften sind verteilt -> nächste Hälfte
         // TODO: wenn Looser 13 Steine hat und alle Hälften sind verteilt -> nächstes Spiel
