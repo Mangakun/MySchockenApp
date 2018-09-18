@@ -104,7 +104,7 @@ public class PlayerImpl implements Player, GameSettings {
             dicesOut.addAll(dicesIn);
             dicesIn.clear();
             if(callback != null) {
-                this.callback.callback(true); // all dices are out
+                this.callback.callback(this,true); // all dices are out
             }
         } else {
             throw new PlayerActionNotAllowedException("The player is not able to call \"stay\"");
@@ -121,7 +121,7 @@ public class PlayerImpl implements Player, GameSettings {
             }
             if (diceThrows == maxDiceThrows) {
                 if(callback != null){
-                    callback.callback(false); // because not all dices are out
+                    callback.callback(this,false); // because not all dices are out
                 }
             }
         } else {

@@ -24,8 +24,9 @@ public class PlayerCallBackTest {
     @Test
     public void callBackTest1(){
         final Player player = spy(new PlayerImpl("Marco", new PlayerCallBack() {
+
             @Override
-            public void callback(boolean finish) {
+            public void callback(Player callBackPlayer, boolean finish) {
                 Assert.assertEquals("Finish should be true",finish ,true);
             }
         }));
@@ -48,7 +49,7 @@ public class PlayerCallBackTest {
     public void callBackTest2(){
         final Player player = spy(new PlayerImpl("Marco", new PlayerCallBack() {
             @Override
-            public void callback(boolean finish) {
+            public void callback(Player callBackPlayer, boolean finish) {
                 Assert.assertEquals("Finish should be true",finish ,true);
             }
         }));
@@ -75,7 +76,7 @@ public class PlayerCallBackTest {
     public void callBackTest3(){
         final Player player = spy(new PlayerImpl("Marco", new PlayerCallBack() {
             @Override
-            public void callback(boolean finish) {
+            public void callback(Player callbackPlayer, boolean finish) {
                 Assert.assertEquals("Finish should be true",finish ,false);
             }
         }));
