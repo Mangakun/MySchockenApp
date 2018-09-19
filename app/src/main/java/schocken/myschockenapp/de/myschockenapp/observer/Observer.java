@@ -1,5 +1,6 @@
 package schocken.myschockenapp.de.myschockenapp.observer;
 
+import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlayerException;
 import schocken.myschockenapp.de.myschockenapp.player.Player;
 
 /**
@@ -29,8 +30,20 @@ public interface Observer {
     Player getCurrentPlayer();
 
     /**
+     * This method returns the current worst player.
+     * @return An object of the class {@link Player}.
+     */
+    Player getCurrentWorstPlayer();
+
+    /**
+     * This method returns the current best player.
+     * @return An object of the class {@link Player}.
+     */
+    Player getCurrentBestPlayer();
+
+    /**
      * This method creates the player of the game.
      * @param playerNames An array of player names.
      */
-    void createPlayers(final String[] playerNames);
+    void createPlayers(final String[] playerNames) throws NotEnoughPlayerException;
 }

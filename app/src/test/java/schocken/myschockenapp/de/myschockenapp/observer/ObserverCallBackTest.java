@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import schocken.myschockenapp.de.myschockenapp.factory.PlayerCreator;
-import schocken.myschockenapp.de.myschockenapp.observer.impl.ObserververImpl;
+import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlayerException;
+import schocken.myschockenapp.de.myschockenapp.observer.impl.ObserverImpl;
 import schocken.myschockenapp.de.myschockenapp.player.Player;
 import schocken.myschockenapp.de.myschockenapp.player.PlayerImpl.PlayerImpl;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxDiceThrowException;
@@ -31,7 +32,7 @@ public class ObserverCallBackTest {
      */
     @Test(expected = RuntimeException.class)
     public void callbackTest1(){
-        PlayerCallBack playerCallBack = spy(new ObserververImpl());
+        PlayerCallBack playerCallBack = spy(new ObserverImpl());
         Player player1 = spy(new PlayerImpl("Marco",playerCallBack));
         try {
             player1.rollTheDice();
@@ -59,14 +60,18 @@ public class ObserverCallBackTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserververImpl());
+        Observer observer = spy(new ObserverImpl());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         List<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
         when(playerCreator.createPlayers(ArgumentMatchers.any(String[].class),ArgumentMatchers.any(PlayerCallBack.class))).thenReturn(players);
-        observer.createPlayers(new String[]{});
+        try {
+            observer.createPlayers(new String[]{"Marco","Michelle"});
+        } catch (NotEnoughPlayerException e) {
+            Assert.fail("There are enough players");
+        }
         observer.newGame();
         try {
             player1.rollTheDice();
@@ -94,14 +99,18 @@ public class ObserverCallBackTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserververImpl());
+        Observer observer = spy(new ObserverImpl());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         List<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
         when(playerCreator.createPlayers(ArgumentMatchers.any(String[].class),ArgumentMatchers.any(PlayerCallBack.class))).thenReturn(players);
-        observer.createPlayers(new String[]{});
+        try {
+            observer.createPlayers(new String[]{"Marco","Michelle"});
+        } catch (NotEnoughPlayerException e) {
+            Assert.fail("There are enough players");
+        }
         observer.newGame();
         try {
             player2.rollTheDice();
@@ -129,14 +138,18 @@ public class ObserverCallBackTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserververImpl());
+        Observer observer = spy(new ObserverImpl());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         List<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
         when(playerCreator.createPlayers(ArgumentMatchers.any(String[].class),ArgumentMatchers.any(PlayerCallBack.class))).thenReturn(players);
-        observer.createPlayers(new String[]{});
+        try {
+            observer.createPlayers(new String[]{"Marco","Michelle"});
+        } catch (NotEnoughPlayerException e) {
+            Assert.fail("There are enough players");
+        }
         observer.newGame();
         try {
             player1.rollTheDice();
@@ -173,14 +186,18 @@ public class ObserverCallBackTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserververImpl());
+        Observer observer = spy(new ObserverImpl());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         List<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
         when(playerCreator.createPlayers(ArgumentMatchers.any(String[].class),ArgumentMatchers.any(PlayerCallBack.class))).thenReturn(players);
-        observer.createPlayers(new String[]{});
+        try {
+            observer.createPlayers(new String[]{"Marco","Michelle"});
+        } catch (NotEnoughPlayerException e) {
+            Assert.fail("There are enough players");
+        }
         observer.newGame();
         try {
             player1.rollTheDice();
@@ -208,14 +225,18 @@ public class ObserverCallBackTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserververImpl());
+        Observer observer = spy(new ObserverImpl());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         List<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
         when(playerCreator.createPlayers(ArgumentMatchers.any(String[].class),ArgumentMatchers.any(PlayerCallBack.class))).thenReturn(players);
-        observer.createPlayers(new String[]{});
+        try {
+            observer.createPlayers(new String[]{"Marco","Michelle"});
+        } catch (NotEnoughPlayerException e) {
+            Assert.fail("There are enough players");
+        }
         observer.newGame();
         try {
             player1.rollTheDice();

@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import schocken.myschockenapp.de.myschockenapp.factory.PlayerCreator;
-import schocken.myschockenapp.de.myschockenapp.observer.impl.ObserververImpl;
+import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlayerException;
+import schocken.myschockenapp.de.myschockenapp.observer.impl.ObserverImpl;
 import schocken.myschockenapp.de.myschockenapp.player.Player;
 
 import static org.mockito.Mockito.mock;
@@ -28,10 +29,10 @@ public class ObserverCreatePlayersTest {
     /**
      * This method tests the method "createPlayers".
      */
-    @Test
-    public void createPlayersTest1(){
-        Observer observer = spy(new ObserververImpl());
-        String[] players = new String[]{"Marco","Michelle"};
+    @Test(expected = NotEnoughPlayerException.class)
+    public void createPlayersTest1() throws NotEnoughPlayerException {
+        Observer observer = spy(new ObserverImpl());
+        String[] players = new String[]{"Marco"};
         observer.createPlayers(players);
         verify(observer,times(1)).createPlayers(ArgumentMatchers.eq(players));
     }
@@ -41,19 +42,19 @@ public class ObserverCreatePlayersTest {
      */
     @Test
     public void createPlayersTest2(){
-        PlayerCreator playerCreator = mock(PlayerCreator.class);
-        try {
-            Field instance = PlayerCreator.class.getDeclaredField("INSTANCE");
-            instance.setAccessible(true);
-            instance.set(instance, playerCreator);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        Observer observer = spy(new ObserververImpl());
+        Observer observer = spy(new ObserverImpl());
         String[] players = new String[]{"Marco","Michelle"};
-        observer.createPlayers(players);
-        verify(observer,times(1)).createPlayers(ArgumentMatchers.eq(players));
-        verify(playerCreator).createPlayers(ArgumentMatchers.eq(players),ArgumentMatchers.eq((PlayerCallBack)observer));
+        try {
+            observer.createPlayers(players);
+        } catch (NotEnoughPlayerException e) {
+            Assert.fail("There are enough players");
+        }
+        try {
+            verify(observer,times(1)).createPlayers(ArgumentMatchers.eq(players));
+        } catch (NotEnoughPlayerException e) {
+            Assert.fail("There are enough players");
+        }
+
     }
 
 
@@ -70,7 +71,7 @@ public class ObserverCreatePlayersTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserververImpl());
+        Observer observer = spy(new ObserverImpl());
         Player player1 = mock(Player.class);
         when(player1.getName()).thenReturn("Marco");
         Player player2 = mock(Player.class);
@@ -78,7 +79,13 @@ public class ObserverCreatePlayersTest {
         players.add(player1);
         players.add(player2);
         when(playerCreator.createPlayers(ArgumentMatchers.any(String[].class),ArgumentMatchers.any(PlayerCallBack.class))).thenReturn(players);
-        observer.createPlayers(new String[]{});
+        String[] playersNames = new String[]{"Marco","Michelle"};
+        try {
+            observer.createPlayers(playersNames);
+        } catch (NotEnoughPlayerException e) {
+            Assert.fail("There are enough players");
+        }
+        verify(playerCreator).createPlayers(ArgumentMatchers.eq(playersNames),ArgumentMatchers.eq((PlayerCallBack)observer));
         observer.newGame();
         Assert.assertEquals("The names should be equal","Marco",observer.getCurrentPlayer().getName());
     }
