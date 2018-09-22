@@ -45,8 +45,6 @@ public class PlayerNewGameNewHalfNextRoundTest extends PlayerTest {
             Assert.assertEquals("The player should have 0 dice throws",1,player.getDiceThrows());
             player.nextGame();
             Assert.assertEquals("The player should have 0 halfs",0,player.getHalfs());
-            Assert.assertEquals("The player should have 0 coasters",0,player.getCoasters());
-            Assert.assertEquals("The player should have 0 dice throws",0,player.getDiceThrows());
         }
     }
 
@@ -64,8 +62,6 @@ public class PlayerNewGameNewHalfNextRoundTest extends PlayerTest {
             Assert.assertEquals("The player should have 1 dice throws",1,player.getDiceThrows());
             player.nextGame();
             Assert.assertEquals("The player should have 0 halfs",0,player.getHalfs());
-            Assert.assertEquals("The player should have 0 coasters",0,player.getCoasters());
-            Assert.assertEquals("The player should have 0 dice throws",0,player.getDiceThrows());
         }
     }
     /**
@@ -91,11 +87,9 @@ public class PlayerNewGameNewHalfNextRoundTest extends PlayerTest {
             } catch (MaxHalfException e) {
                 Assert.fail("It is allowed to add a half");
             }
-            Assert.assertEquals("The player should have 0 halfs",1,player.getHalfs());
+            Assert.assertEquals("The player should have 1 halfs",1,player.getHalfs());
             player.nextHalf();
             Assert.assertEquals("The player should have 0 coasters",0,player.getCoasters());
-            Assert.assertEquals("The player should have 0 dice throws",0,player.getDiceThrows());
-            Assert.assertEquals("The player should have 0 halfs",1,player.getHalfs());
         }
     }
     /**

@@ -8,7 +8,9 @@ import schocken.myschockenapp.de.myschockenapp.observer.Observer;
 import schocken.myschockenapp.de.myschockenapp.observer.PlayerCallBack;
 import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlayerException;
 import schocken.myschockenapp.de.myschockenapp.player.Player;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxCoastersException;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxDiceThrowException;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxHalfException;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.NotEnoughDicesOutException;
 
 /**
@@ -57,7 +59,6 @@ public class ObserverImpl implements Observer, PlayerCallBack{
     public ObserverImpl(){
         players = null;
         currentPlayers = null;
-
     }
 
     @Override
@@ -66,35 +67,37 @@ public class ObserverImpl implements Observer, PlayerCallBack{
 //        /*
 //        Eine andere Möglichkeit wäre, dass jeder würfelt und
 //         */
-        resetCurrentPlayers();
-        currentPlayers.addAll(players);
+
         // init players
         for(Player player: currentPlayers){
             player.nextGame();
         }
         // set first player
-        currentPlayer = currentPlayers.get(0);
-        roundStarter = currentPlayer;
-        // start with the game
-        currentPlayer.turn();
+        roundStarter = players.get(0);
+        nextHalf();
     }
 
     @Override
     public void nextHalf() {
-        resetCurrentPlayers();
         // init players
         for(Player player: players){
             player.nextHalf();
         }
+        coastersStack = 13;
+        nextRound();
     }
 
     @Override
     public void nextRound() {
         resetCurrentPlayers();
+        currentPlayers.addAll(players);
         // init players
         for(Player player: players){
             player.nextRound();
         }
+        // start with the game
+        currentPlayer = roundStarter;
+        currentPlayer.turn();
     }
 
 
@@ -102,12 +105,12 @@ public class ObserverImpl implements Observer, PlayerCallBack{
      * This method decides the continuing.
      */
     private void end(){
-        // TODO: steine verteilen
-        // TODO: wenn looser 13 Steine hat -> Spiel für nächste Runde
-        // TODO: wenn Looser 13 Steine hat und noch nicht alle Hälften sind verteilt -> nächste Hälfte
-        // TODO: wenn Looser 13 Steine hat und alle Hälften sind verteilt -> nächstes Spiel
+        distributeCoasters();
+        // TODO: neues Spiel > loser hat alle hälften
+        // TODO: nexte Hälfte > loser hat 13 coasters
+        // TODO: neue Runde > ansonsten
         // TODO: Presenter benachrichtigen
-        // TODO: roundstarter setzen
+        //this.roundStarter = currentWorstPlayer;
     }
 
 
@@ -225,13 +228,13 @@ public class ObserverImpl implements Observer, PlayerCallBack{
             }
             // worst dice value
             if(currentPlayerDiceValue < currentWorstPlayerDiceValue){
-                currentWorstPlayer = currentWorstPlayer;
+                currentWorstPlayer = currentPlayer;
             }else{
                 // same dice value
                 if(currentPlayerDiceValue == currentWorstPlayerDiceValue){
                     // look for throws needed
                     if(currentPlayer.getDiceThrows() > currentWorstPlayer.getDiceThrows()){
-                        currentWorstPlayer = currentWorstPlayer;
+                        currentWorstPlayer = currentPlayer;
                     }
                 }
             }
@@ -260,13 +263,13 @@ public class ObserverImpl implements Observer, PlayerCallBack{
             }
             // worst dice value
             if(currentPlayerDiceValue > currentBestPlayerDiceValue){
-                currentBestPlayer = currentWorstPlayer;
+                currentBestPlayer = currentPlayer;
             }else{
                 // same dice value
                 if(currentPlayerDiceValue == currentBestPlayerDiceValue){
                     // look for throws needed
                     if(currentPlayer.getDiceThrows() < currentBestPlayer.getDiceThrows()){
-                        currentBestPlayer = currentWorstPlayer;
+                        currentBestPlayer = currentPlayer;
                     }
                 }
             }
@@ -276,7 +279,54 @@ public class ObserverImpl implements Observer, PlayerCallBack{
     /**
      * This method distribute the coasters from the best to the worst player.
      */
-    private void distributeCoasters(){
-        // TODO:
+    private void distributeCoasters() {
+       if(currentBestPlayer == currentWorstPlayer){
+            try {
+                throw new Exception("The best player cant be the worst player at once !");
+            } catch (Exception e) {
+                e.printStackTrace(); // TODO
+            }
+        }
+        int coasters = 0;
+        try {
+            coasters = currentBestPlayer.getCoastersOfDiceValue();
+        } catch (NotEnoughDicesOutException e) {
+        }
+        if(coasters == 13){
+            try {
+                currentWorstPlayer.setCoasters(13);
+            } catch (MaxCoastersException e) {
+                //TODO ?
+            }
+            // add half
+            try {
+                currentWorstPlayer.addHalf();
+            } catch (MaxHalfException e) {
+                // TODO ?
+            }
+            // reset other players
+            for(final Player player : players){
+                if(player != currentWorstPlayer){
+                    try {
+                        player.setCoasters(0);
+                    } catch (MaxCoastersException e) {
+                        // TODO ?
+                    }
+                }
+            }
+        }else{
+            if(coastersStack > 0){
+                coasters = Math.min(coastersStack, coasters);
+                coastersStack-=coasters;
+            }else {
+                coasters = Math.min(currentBestPlayer.getCoasters(), coasters);
+                currentBestPlayer.removeCoasters(coasters);
+            }
+            try {
+                currentWorstPlayer.addCoasters(coasters);
+            } catch (MaxCoastersException e) {
+                // TODO
+            }
+        }
     }
 }

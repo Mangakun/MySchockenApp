@@ -205,9 +205,8 @@ public class PlayerRollTheDiceStayAndOpenTheCupTest extends PlayerTest {
             }
             try {
                 player.stay();
-                Assert.fail("The player can not call stay.");
             } catch (PlayerActionNotAllowedException e) {
-
+                Assert.fail("The player can not call stay.");
             }
         }
     }

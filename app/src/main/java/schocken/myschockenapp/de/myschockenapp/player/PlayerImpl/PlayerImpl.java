@@ -67,6 +67,11 @@ public class PlayerImpl implements Player, GameSettings {
     private int halfs;
 
     /**
+     * Boolean, if the player clicked on openTheCup
+     */
+    private boolean openTheCupCalled;
+
+    /**
      * Constructor of the class {@link PlayerImpl}.
      * @param playerName The name of the player.
      */
@@ -133,6 +138,7 @@ public class PlayerImpl implements Player, GameSettings {
     public void openCup() throws PlayerActionNotAllowedException {
         if (isAbleToOpenTheCup()) {
             // TODO: die Würfel sollen noch gezeigt werden und im Anschluss soll der nächste Spiler an der Reihe sein, wenn der Spieler auf "Weiter" oder so klickt.
+            openTheCupCalled = true;
         } else {
             throw new PlayerActionNotAllowedException("The player is not allowed to open the cup");
         }
@@ -165,14 +171,21 @@ public class PlayerImpl implements Player, GameSettings {
     }
 
     @Override
+    public void removeCoasters(int coasters) {
+        this.coasters-=coasters;
+        if(coasters < 0){
+            coasters = 0;
+        }
+    }
+
+    @Override
     public void nextHalf() {
         coasters = 0;
-        nextRound();
-
     }
 
     @Override
     public void nextRound() {
+        openTheCupCalled = false;
         diceThrows = 0;
         dicesOut.clear();
     }
@@ -180,7 +193,6 @@ public class PlayerImpl implements Player, GameSettings {
     @Override
     public void nextGame() {
         halfs = 0;
-        nextHalf();
     }
 
     @Override
@@ -312,6 +324,10 @@ public class PlayerImpl implements Player, GameSettings {
         if (diceThrows > 0 && diceThrows < maxDiceThrows && dicesOut.size() != MAXDICESIZE) {
             return true;
         }
+        if(openTheCupCalled){
+            openTheCupCalled = false;
+            return true;
+        }
         return false;
     }
 
@@ -325,6 +341,7 @@ public class PlayerImpl implements Player, GameSettings {
         } else {
             return false;
         }
+
     }
 
 
@@ -333,11 +350,18 @@ public class PlayerImpl implements Player, GameSettings {
      * @return True, if the player is able to call stay.
      */
     private boolean isAbleToOpenTheCup() {
-        if (dicesIn.size() != 0 && diceThrows == maxDiceThrows) {
+        if (diceThrows > 0 && dicesOut.size() != MAXDICESIZE && diceThrows == maxDiceThrows) {
             return true;
         } else {
             return false;
         }
     }
+
+
+    /**
+     * TODO: turn around option!
+     * TODO: Würfel anzeigen
+     *
+     */
 
 }

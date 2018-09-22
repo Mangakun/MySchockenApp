@@ -27,10 +27,16 @@ public interface PlayerGameActions {
     void addCoasters(int coasters) throws MaxCoastersException;
 
     /**
-     * This method sets the coasters of the player.
+     * This method sets the given coasters of the player.
      * @param coasters
      */
     void setCoasters(int coasters) throws MaxCoastersException;
+
+    /**
+     * This method remove the given coasters of the player.
+     * @param coasters
+     */
+    void removeCoasters(int coasters);
 
     /**
      * This method starts the next half for the player.

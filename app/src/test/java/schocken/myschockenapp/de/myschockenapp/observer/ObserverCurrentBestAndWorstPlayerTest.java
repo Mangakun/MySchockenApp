@@ -23,6 +23,7 @@ import schocken.myschockenapp.de.myschockenapp.player.exceptions.PlayerActionNot
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -145,13 +146,13 @@ public class ObserverCurrentBestAndWorstPlayerTest {
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         // dice 1
         DiceValue p2value1 = spy(new DiceImpl());
-        when(value1.getValue()).thenReturn(2);
+        when(p2value1.getValue()).thenReturn(2);
         // dice 2
         DiceValue p2value2 = spy(new DiceImpl());
-        when(value2.getValue()).thenReturn(5);
+        when(p2value2.getValue()).thenReturn(5);
         // dice 3
         DiceValue p2value3 = spy(new DiceImpl());
-        when(value3.getValue()).thenReturn(4);
+        when(p2value3.getValue()).thenReturn(4);
         // create list
         List<DiceValue> list2 = new ArrayList<DiceValue>();
         list2.add(p2value1);
@@ -217,6 +218,20 @@ public class ObserverCurrentBestAndWorstPlayerTest {
         }
 
         verify((PlayerCallBack)observer).callback(ArgumentMatchers.eq(player2),ArgumentMatchers.eq(false));
+        verify(player2,times(2)).turn();
+
+        try {
+            player2.openCup();
+        } catch (PlayerActionNotAllowedException e) {
+            Assert.fail("The player is allowed to open the cup");
+        }
+
+        try {
+            player2.stay();
+        } catch (PlayerActionNotAllowedException e) {
+            Assert.fail("The player is able to call stay");
+        }
+        verify((PlayerCallBack)observer).callback(ArgumentMatchers.eq(player2),ArgumentMatchers.eq(true));
         Assert.assertEquals("The current best player should be player 2",player2,observer.getCurrentBestPlayer());
         Assert.assertEquals("The worst player should be player 1", player1, observer.getCurrentWorstPlayer());
 
