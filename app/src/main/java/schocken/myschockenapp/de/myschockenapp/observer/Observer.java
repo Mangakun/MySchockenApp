@@ -16,7 +16,7 @@ public interface Observer {
     /**
      * This method starts a new half of a round.
      */
-    void nextHalf();
+    void nextHalf() throws Exception;
 
     /**
      * This method starts a new round.

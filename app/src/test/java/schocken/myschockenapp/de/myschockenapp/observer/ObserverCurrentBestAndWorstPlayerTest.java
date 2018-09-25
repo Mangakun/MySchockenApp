@@ -234,7 +234,6 @@ public class ObserverCurrentBestAndWorstPlayerTest {
         verify((PlayerCallBack)observer).callback(ArgumentMatchers.eq(player2),ArgumentMatchers.eq(true));
         Assert.assertEquals("The current best player should be player 2",player2,observer.getCurrentBestPlayer());
         Assert.assertEquals("The worst player should be player 1", player1, observer.getCurrentWorstPlayer());
-
     }
 
 
