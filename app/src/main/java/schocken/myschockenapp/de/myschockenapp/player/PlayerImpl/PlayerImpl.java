@@ -187,6 +187,7 @@ public class PlayerImpl implements Player, GameSettings {
     public void nextRound() {
         openTheCupCalled = false;
         diceThrows = 0;
+        dicesIn.addAll(dicesOut);
         dicesOut.clear();
     }
 

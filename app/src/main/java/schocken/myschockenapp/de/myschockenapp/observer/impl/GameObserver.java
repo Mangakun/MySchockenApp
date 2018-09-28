@@ -10,13 +10,12 @@ import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlay
 import schocken.myschockenapp.de.myschockenapp.player.Player;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxCoastersException;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxDiceThrowException;
-import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxHalfException;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.NotEnoughDicesOutException;
 
 /**
  * Implementation class of the observer
  */
-public class ObserverImpl implements Observer, PlayerCallBack {
+public class GameObserver implements Observer, PlayerCallBack {
 
     /**
      * A list of players.
@@ -51,15 +50,15 @@ public class ObserverImpl implements Observer, PlayerCallBack {
     /**
      * The coasters stack
      */
-    private CoasterStack coastersStack;
+    private CoasterStackObserver coasterStackObserver;
 
     /**
-     * Constructor of the class {@link ObserverImpl}.
+     * Constructor of the class {@link GameObserver}.
      */
-    public ObserverImpl() {
+    public GameObserver() {
         players = null;
         currentPlayers = null;
-        coastersStack = new CoasterStack();
+        coasterStackObserver = new CoasterStackObserverImpl();
     }
 
     @Override
@@ -69,7 +68,7 @@ public class ObserverImpl implements Observer, PlayerCallBack {
 //        /*
 //        Eine andere Möglichkeit wäre, dass jeder würfelt und
 //         */
-        coastersStack.resetCoastersStack();
+        currentPlayers.addAll(players);
         // init players
         for (Player player : currentPlayers) {
             player.nextGame();
@@ -86,22 +85,20 @@ public class ObserverImpl implements Observer, PlayerCallBack {
     @Override
     public void nextHalf() throws Exception {
         System.out.println("Nächste Hälfte");
-        if(coastersStack.getFirstHalf() != null && coastersStack.getSecondHalf() != null){
+        if(coasterStackObserver.getFirstHalf() != null && coasterStackObserver.getSecondHalf() != null){
             throw new Exception("Next half is not allowed");
         }
         // init players
         for (Player player : players) {
             player.nextHalf();
         }
+        coasterStackObserver.resetCoasters();
         nextRound();
     }
 
     @Override
     public void nextRound() {
         System.out.println("Nächste Runde");
-        resetCurrentPlayers();
-        coastersStack.resetCoasters();
-        currentPlayers.addAll(players);
         // init players
         for (Player player : players) {
             player.nextRound();
@@ -118,28 +115,38 @@ public class ObserverImpl implements Observer, PlayerCallBack {
     private void end() {
         distributeCoasters();
         // one player has both halfs -> game ends
-        if(coastersStack.playerHasBothHalfs()){
-                System.out.println("Game ist zuende");
-        }else{
-            // first half and second half are distributed, but one player has not both halfs
-            if(coastersStack.getFirstHalf() != null && coastersStack.getSecondHalf() != null && !coastersStack.playerHasBothHalfs()){
+        if (coasterStackObserver.playerHasBothHalfs()) {
+            System.out.println("Game ist zuende");
+        } else {
+            if (coasterStackObserver.allHalfsDistributed()) {
                 currentPlayers.clear();
-                currentPlayers.add(coastersStack.getSecondHalf());
-                currentPlayers.add(coastersStack.getFirstHalf());
+                currentPlayers.add(coasterStackObserver.getSecondHalf());
+                currentPlayers.add(coasterStackObserver.getFirstHalf());
                 roundStarter = currentPlayers.get(0);
-                try {
-                    nextHalf();
-                } catch (Exception e) {
-                    e.printStackTrace();
+               // try {
+              //      nextHalf();
+               // } catch (Exception e) {
+               //     e.printStackTrace();
+               // }
+            } else {
+                if (coasterStackObserver.coasterStackEmpty()) {
+                    currentPlayers.clear();
+                    for (Player player : players) {
+                        if (player.getCoasters() == 0) {
+                            continue;
+                        }
+                        currentPlayers.add(player);
+                    }
+                } else {
+                    currentPlayers.clear();
+                    currentPlayers.addAll(players);
+                    // normal next round
+                    this.roundStarter = currentWorstPlayer;
+                    //nextRound();
                 }
-            }else{
-                // normal next round
-                this.roundStarter = currentWorstPlayer;
-                nextRound();
             }
         }
         // TODO: Presenter benachrichtigen
-
     }
 
 
@@ -190,22 +197,13 @@ public class ObserverImpl implements Observer, PlayerCallBack {
             if (currentPlayers.size() <= 0) {
                 end();
             } else {
-                nextPlayer(currentPlayers.indexOf(currentPlayer) + 1);
+                nextPlayer(oldIndex);
             }
         } else {
             nextPlayer(currentPlayers.indexOf(currentPlayer) + 1);
         }
     }
 
-    /**
-     * This method resets special objects.
-     */
-    private void resetCurrentPlayers() {
-        currentPlayer = null;
-        currentBestPlayer = null;
-        currentWorstPlayer = null;
-        currentPlayers.clear();
-    }
 
     /**
      * This method distributes the max dice throws.
@@ -327,7 +325,7 @@ public class ObserverImpl implements Observer, PlayerCallBack {
         }
         if (coasters == 13) {
             try {
-                coastersStack.takeAwayHalf(currentWorstPlayer);
+                coasterStackObserver.takeAwayHalf(currentWorstPlayer);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -342,7 +340,7 @@ public class ObserverImpl implements Observer, PlayerCallBack {
                 }
             }
         } else {
-            if (!coastersStack.takeAwayCoasters(coasters, currentWorstPlayer)) {
+            if (!coasterStackObserver.takeAwayCoasters(coasters, currentWorstPlayer)) {
                 coasters = Math.min(currentBestPlayer.getCoasters(), coasters);
                 currentBestPlayer.removeCoasters(coasters);
                 try {
@@ -354,10 +352,33 @@ public class ObserverImpl implements Observer, PlayerCallBack {
         }
     }
 
+    private interface CoasterStackObserver{
+
+        boolean coasterStackEmpty();
+
+        boolean allHalfsDistributed();
+
+        void resetCoasters();
+
+        void resetHalfs();
+
+        Player getFirstHalf();
+
+        Player getSecondHalf();
+
+        boolean takeAwayCoasters(int coasters, final Player worstPlayer);
+
+        void takeAwayHalf(final Player worstPlayer)throws Exception;
+
+        boolean playerHasBothHalfs();
+
+
+    }
+
     /**
      * This class represents the coasters stack.
      */
-    private class CoasterStack {
+    private class CoasterStackObserverImpl implements CoasterStackObserver {
 
         /**
          * The coasters stack
@@ -375,9 +396,9 @@ public class ObserverImpl implements Observer, PlayerCallBack {
         private Player secondHalf;
 
         /**
-         * Constructor of the class {@link CoasterStack}.
+         * Constructor of the class {@link CoasterStackObserverImpl}.
          */
-        public CoasterStack() {
+        public CoasterStackObserverImpl() {
             coastersStack = 13;
             firstHalf = null;
             secondHalf = null;
@@ -406,19 +427,19 @@ public class ObserverImpl implements Observer, PlayerCallBack {
 
         /**
          * This method takes away a half
-         * @param player
+         * @param worstPlayer
          * @throws Exception
          */
-        public void takeAwayHalf(final Player player) throws Exception {
+        public void takeAwayHalf(final Player worstPlayer) throws Exception {
             if (firstHalf == null) {
-                firstHalf = player;
-                player.setCoasters(13);
-                player.addHalf();
+                firstHalf = worstPlayer;
+                worstPlayer.setCoasters(13);
+                worstPlayer.addHalf();
             } else {
                 if (secondHalf == null) {
-                    secondHalf = player;
-                    player.setCoasters(13);
-                    player.addHalf();
+                    secondHalf = worstPlayer;
+                    worstPlayer.setCoasters(13);
+                    worstPlayer.addHalf();
                 } else {
                     throw new Exception("Beide hälften sind schon gesetzt");
                 }
@@ -426,7 +447,8 @@ public class ObserverImpl implements Observer, PlayerCallBack {
         }
 
         public boolean playerHasBothHalfs(){
-            return firstHalf == secondHalf;
+
+            return firstHalf != null && firstHalf ==secondHalf;
         }
 
         public Player getFirstHalf() {
@@ -437,6 +459,16 @@ public class ObserverImpl implements Observer, PlayerCallBack {
             return secondHalf;
         }
 
+        @Override
+        public boolean coasterStackEmpty() {
+            return coastersStack == 0;
+        }
+
+        @Override
+        public boolean allHalfsDistributed() {
+            return firstHalf != null && secondHalf != null;
+        }
+
         /**
          * This method returns the coasters.
          */
@@ -444,13 +476,11 @@ public class ObserverImpl implements Observer, PlayerCallBack {
             coastersStack = 13;
         }
 
-        /**
-         * This method resets the whole {@link CoasterStack}.
-         */
-        public void resetCoastersStack() {
-            coastersStack = 13;
+        @Override
+        public void resetHalfs() {
             firstHalf = null;
             secondHalf = null;
         }
+
     }
 }

@@ -13,7 +13,7 @@ import schocken.myschockenapp.de.myschockenapp.dice.DiceValue;
 import schocken.myschockenapp.de.myschockenapp.dice.impl.DiceImpl;
 import schocken.myschockenapp.de.myschockenapp.factory.PlayerCreator;
 import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlayerException;
-import schocken.myschockenapp.de.myschockenapp.observer.impl.ObserverImpl;
+import schocken.myschockenapp.de.myschockenapp.observer.impl.GameObserver;
 import schocken.myschockenapp.de.myschockenapp.player.Player;
 import schocken.myschockenapp.de.myschockenapp.player.PlayerImpl.PlayerImpl;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxCoastersException;
@@ -45,7 +45,7 @@ public class ObserverDistributeCoastersTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         // dice 1
         DiceValue value1 = spy(new DiceImpl());
@@ -177,7 +177,7 @@ public class ObserverDistributeCoastersTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         // dice 1
         DiceValue value1 = spy(new DiceImpl());

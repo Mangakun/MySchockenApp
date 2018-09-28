@@ -11,7 +11,7 @@ import java.util.List;
 
 import schocken.myschockenapp.de.myschockenapp.factory.PlayerCreator;
 import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlayerException;
-import schocken.myschockenapp.de.myschockenapp.observer.impl.ObserverImpl;
+import schocken.myschockenapp.de.myschockenapp.observer.impl.GameObserver;
 import schocken.myschockenapp.de.myschockenapp.player.Player;
 
 import static org.mockito.Mockito.mock;
@@ -29,7 +29,7 @@ public class ObserverNewGameTest {
      */
     @Test
     public void newGameTest1(){
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         try {
             observer.createPlayers(new String[]{"Marco","Michelle"});
         } catch (NotEnoughPlayerException e) {
@@ -54,7 +54,7 @@ public class ObserverNewGameTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         Player player1 = mock(Player.class);
         when(player1.getName()).thenReturn("Marco");
         Player player2 = mock(Player.class);

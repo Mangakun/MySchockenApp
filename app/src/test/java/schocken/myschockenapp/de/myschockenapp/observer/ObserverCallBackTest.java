@@ -11,7 +11,7 @@ import java.util.List;
 
 import schocken.myschockenapp.de.myschockenapp.factory.PlayerCreator;
 import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlayerException;
-import schocken.myschockenapp.de.myschockenapp.observer.impl.ObserverImpl;
+import schocken.myschockenapp.de.myschockenapp.observer.impl.GameObserver;
 import schocken.myschockenapp.de.myschockenapp.player.Player;
 import schocken.myschockenapp.de.myschockenapp.player.PlayerImpl.PlayerImpl;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxDiceThrowException;
@@ -32,7 +32,7 @@ public class ObserverCallBackTest {
      */
     @Test(expected = RuntimeException.class)
     public void callbackTest1(){
-        PlayerCallBack playerCallBack = spy(new ObserverImpl());
+        PlayerCallBack playerCallBack = spy(new GameObserver());
         Player player1 = spy(new PlayerImpl("Marco",playerCallBack));
         try {
             player1.rollTheDice();
@@ -60,7 +60,7 @@ public class ObserverCallBackTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         List<Player> players = new ArrayList<>();
@@ -99,7 +99,7 @@ public class ObserverCallBackTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         List<Player> players = new ArrayList<>();
@@ -138,7 +138,7 @@ public class ObserverCallBackTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         List<Player> players = new ArrayList<>();
@@ -186,7 +186,7 @@ public class ObserverCallBackTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         List<Player> players = new ArrayList<>();
@@ -225,7 +225,7 @@ public class ObserverCallBackTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         Player player2 = spy(new PlayerImpl("Michelle",(PlayerCallBack)observer));
         List<Player> players = new ArrayList<>();

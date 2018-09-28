@@ -7,18 +7,16 @@ import org.mockito.ArgumentMatchers;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import schocken.myschockenapp.de.myschockenapp.dice.DiceValue;
 import schocken.myschockenapp.de.myschockenapp.dice.impl.DiceImpl;
 import schocken.myschockenapp.de.myschockenapp.factory.PlayerCreator;
 import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlayerException;
-import schocken.myschockenapp.de.myschockenapp.observer.impl.ObserverImpl;
+import schocken.myschockenapp.de.myschockenapp.observer.impl.GameObserver;
 import schocken.myschockenapp.de.myschockenapp.player.Player;
 import schocken.myschockenapp.de.myschockenapp.player.PlayerImpl.PlayerImpl;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxDiceThrowException;
-import schocken.myschockenapp.de.myschockenapp.player.exceptions.NotEnoughDicesOutException;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.PlayerActionNotAllowedException;
 
 import static org.mockito.Mockito.mock;
@@ -45,7 +43,7 @@ public class ObserverCurrentBestAndWorstPlayerTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         // dice 1
         DiceValue value1 = spy(new DiceImpl());
@@ -125,7 +123,7 @@ public class ObserverCurrentBestAndWorstPlayerTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        Observer observer = spy(new ObserverImpl());
+        Observer observer = spy(new GameObserver());
         Player player1 = spy(new PlayerImpl("Marco",(PlayerCallBack)observer));
         // dice 1
         DiceValue value1 = spy(new DiceImpl());
