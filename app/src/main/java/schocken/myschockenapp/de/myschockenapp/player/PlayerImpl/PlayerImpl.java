@@ -189,6 +189,7 @@ public class PlayerImpl implements Player, GameSettings {
         diceThrows = 0;
         dicesIn.addAll(dicesOut);
         dicesOut.clear();
+        maxDiceThrows = 3;
     }
 
     @Override
