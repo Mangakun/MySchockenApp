@@ -85,11 +85,8 @@ public class GameObserver implements Observer, PlayerCallBack {
     @Override
     public void nextHalf() throws Exception {
         System.out.println("Nächste Hälfte");
-        if(coasterStackObserver.getFirstHalf() != null && coasterStackObserver.getSecondHalf() != null){
-            throw new Exception("Next half is not allowed");
-        }
         // init players
-        for (Player player : players) {
+        for (Player player : currentPlayers) {
             player.nextHalf();
         }
         coasterStackObserver.resetCoasters();
@@ -99,6 +96,7 @@ public class GameObserver implements Observer, PlayerCallBack {
     @Override
     public void nextRound() {
         System.out.println("Nächste Runde");
+        resetCurrentPlayers();
         // init players
         for (Player player : players) {
             player.nextRound();
@@ -120,31 +118,39 @@ public class GameObserver implements Observer, PlayerCallBack {
         } else {
             if (coasterStackObserver.allHalfsDistributed()) {
                 currentPlayers.clear();
-                currentPlayers.add(coasterStackObserver.getSecondHalf());
                 currentPlayers.add(coasterStackObserver.getFirstHalf());
+                currentPlayers.add(coasterStackObserver.getSecondHalf());
                 roundStarter = currentPlayers.get(0);
-               // try {
-              //      nextHalf();
-               // } catch (Exception e) {
-               //     e.printStackTrace();
-               // }
+                // try {
+                //      nextHalf();
+                // } catch (Exception e) {
+                //     e.printStackTrace();
+                // }
             } else {
-                if (coasterStackObserver.coasterStackEmpty()) {
-                    currentPlayers.clear();
-                    for (Player player : players) {
-                        if (player.getCoasters() == 0) {
-                            continue;
-                        }
-                        currentPlayers.add(player);
-                    }
-                } else {
+                if(currentWorstPlayer.getCoasters() == 13){
                     currentPlayers.clear();
                     currentPlayers.addAll(players);
                     // normal next round
-                    this.roundStarter = currentWorstPlayer;
                     //nextRound();
+                }else {
+                    if (coasterStackObserver.coasterStackEmpty()) {
+                        currentPlayers.clear();
+                        for (Player player : players) {
+                            if (player.getCoasters() == 0) {
+                                continue;
+                            }
+                            currentPlayers.add(player);
+                        }
+                    } else {
+                        currentPlayers.clear();
+                        currentPlayers.addAll(players);
+                        // normal next round
+                        //nextRound();
+                    }
                 }
+                this.roundStarter = currentWorstPlayer;
             }
+
         }
         // TODO: Presenter benachrichtigen
     }
@@ -352,7 +358,13 @@ public class GameObserver implements Observer, PlayerCallBack {
         }
     }
 
-    private interface CoasterStackObserver{
+    private void resetCurrentPlayers() {
+        currentWorstPlayer = null;
+        currentBestPlayer = null;
+        currentPlayer = null;
+    }
+
+    private interface CoasterStackObserver {
 
         boolean coasterStackEmpty();
 
@@ -368,7 +380,7 @@ public class GameObserver implements Observer, PlayerCallBack {
 
         boolean takeAwayCoasters(int coasters, final Player worstPlayer);
 
-        void takeAwayHalf(final Player worstPlayer)throws Exception;
+        void takeAwayHalf(final Player worstPlayer) throws Exception;
 
         boolean playerHasBothHalfs();
 
@@ -427,6 +439,7 @@ public class GameObserver implements Observer, PlayerCallBack {
 
         /**
          * This method takes away a half
+         *
          * @param worstPlayer
          * @throws Exception
          */
@@ -446,9 +459,9 @@ public class GameObserver implements Observer, PlayerCallBack {
             }
         }
 
-        public boolean playerHasBothHalfs(){
+        public boolean playerHasBothHalfs() {
 
-            return firstHalf != null && firstHalf ==secondHalf;
+            return firstHalf != null && firstHalf == secondHalf;
         }
 
         public Player getFirstHalf() {

@@ -234,7 +234,7 @@ public class GameSimulationTest extends AbstractGameSimulationTest{
         // set dices for this round
         setDicesOutOfPlayer(marco, 1,1,3);
         setDicesOutOfPlayer(michelle,1,1,5);
-        setDicesOutOfPlayer(marei,1,1,1);
+        setDicesOutOfPlayer(marei,1,1,4);
 
         // Mareis turn
         verify(marei,times(6)).turn();
@@ -280,7 +280,7 @@ public class GameSimulationTest extends AbstractGameSimulationTest{
         }
 
         // Marcos turn
-        verify(marco,times(6)).turn();
+        verify(marco,times(7)).turn();
         try {
             marco.openCup();
             marco.stay();
@@ -290,7 +290,7 @@ public class GameSimulationTest extends AbstractGameSimulationTest{
         }
 
         // Michelles turn
-        verify(michelle,times(6)).turn();
+        verify(michelle,times(7)).turn();
         try {
             michelle.openCup();
             michelle.stay();
@@ -366,8 +366,8 @@ public class GameSimulationTest extends AbstractGameSimulationTest{
 
         // distribute coasters
         try {
-            verify(marco,times(2)).addCoasters(ArgumentMatchers.eq(-2));
-            verify(marei,times(2)).addCoasters(ArgumentMatchers.eq(2));
+            verify(marco,times(1)).removeCoasters(ArgumentMatchers.eq(2));
+            verify(marei,times(3)).addCoasters(ArgumentMatchers.eq(2));
         } catch (MaxCoastersException e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());
@@ -458,6 +458,124 @@ public class GameSimulationTest extends AbstractGameSimulationTest{
             Assert.fail(e.getMessage());
         }
 
+        // next half
+        try {
+            observer.nextHalf();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        // set dices for this round
+        setDicesOutOfPlayer(marco, 3,4,5);
+        setDicesOutOfPlayer(michelle,1,1,4);
+        setDicesOutOfPlayer(marei,1,1,1);
+
+
+        // Mareis turn
+        verify(marei,times(12)).turn();
+        try {
+            marei.rollTheDice();
+            marei.rollTheDice();
+            marei.stay();
+        } catch (PlayerActionNotAllowedException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        // Marcos turn
+        verify(marco,times(11)).turn();
+        try {
+            marco.rollTheDice();
+            marco.stay();
+        } catch (PlayerActionNotAllowedException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        // Michelles turn
+        verify(michelle,times(12)).turn();
+        try {
+            michelle.rollTheDice();
+            michelle.rollTheDice();
+        } catch (PlayerActionNotAllowedException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        // Michelles turn
+        verify(michelle,times(13)).turn();
+        try {
+            michelle.openCup();
+            michelle.stay();
+        } catch (PlayerActionNotAllowedException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        // distribute coasters
+        try {
+            verify(marco,times(1)).setCoasters(ArgumentMatchers.eq(13));
+            verify(marco,times(1)).addHalf();
+            verify(marei,times(1)).setCoasters(ArgumentMatchers.eq(0));
+            verify(michelle,times(2)).setCoasters(ArgumentMatchers.eq(0));
+        } catch (MaxCoastersException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        } catch (MaxHalfException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        // next half
+        try {
+            observer.nextHalf();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        // set dices for this round
+        setDicesOutOfPlayer(marco, 1,1,4);
+        setDicesOutOfPlayer(marei,1,1,3);
+        Assert.assertTrue(observer.getCurrentPlayer().equals(marei));
+
+        // Mareis turn
+        verify(marei,times(13)).turn();
+        try {
+            marei.rollTheDice();
+            marei.rollTheDice();
+            marei.stay();
+        } catch (PlayerActionNotAllowedException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        // Marcos turn
+        verify(marco,times(12)).turn();
+        try {
+            marco.rollTheDice();
+            marco.rollTheDice();
+        } catch (PlayerActionNotAllowedException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+        // Marcos turn
+        verify(marco,times(13)).turn();
+        try {
+            marco.openCup();
+            marco.stay();
+        } catch (PlayerActionNotAllowedException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        try {
+            verify(marei,times(1)).addCoasters(ArgumentMatchers.eq(4));
+        } catch (MaxCoastersException e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
 
     }
 }
