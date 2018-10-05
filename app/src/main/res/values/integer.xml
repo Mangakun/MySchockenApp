@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="maxdicethrows">3</integer>
+    <integer name="maxdicesize">3</integer>
+    <integer name="maxcoasters">13</integer>
+</resources>

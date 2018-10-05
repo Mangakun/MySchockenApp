@@ -34,4 +34,6 @@ dependencies {
     // required if you want to use Mockito for Android tests
     //androidTestCompile 'org.mockito:mockito-android:2.7.22'
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.android.support:recyclerview-v7:26.0.0'
+
 }

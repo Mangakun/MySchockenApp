@@ -10,7 +10,6 @@ import schocken.myschockenapp.de.myschockenapp.R;
 import schocken.myschockenapp.de.myschockenapp.dice.Dice;
 import schocken.myschockenapp.de.myschockenapp.dice.DiceValue;
 import schocken.myschockenapp.de.myschockenapp.dice.impl.DiceImpl;
-import schocken.myschockenapp.de.myschockenapp.gamesettings.GameSettings;
 import schocken.myschockenapp.de.myschockenapp.observer.PlayerCallBack;
 import schocken.myschockenapp.de.myschockenapp.player.Player;
 import schocken.myschockenapp.de.myschockenapp.player.exceptions.DiceNotFoundException;
@@ -24,7 +23,7 @@ import schocken.myschockenapp.de.myschockenapp.player.exceptions.PlayerActionNot
 /**
  * The implementation class of a player
  */
-public class PlayerImpl implements Player, GameSettings {
+public class PlayerImpl implements Player {
 
     /**
      * The name of the player.
@@ -88,11 +87,11 @@ public class PlayerImpl implements Player, GameSettings {
         this.playerName = playerName;
         this.diceThrows = 0;
         dicesIn = new ArrayList<>();
-        for (int i = 0; i < MAXDICESIZE; ++i) {
+        for (int i = 0; i < Resources.getSystem().getInteger(R.integer.maxdicesize); ++i) {
             dicesIn.add(new DiceImpl());
         }
         dicesOut = new ArrayList<>();
-        maxDiceThrows = MAXDICETRHOWS;
+        maxDiceThrows = Resources.getSystem().getInteger(R.integer.maxdicethrows);
         this.callback = callBack;
     }
 
@@ -156,7 +155,7 @@ public class PlayerImpl implements Player, GameSettings {
 
     @Override
     public void addCoasters(int coasters) throws MaxCoastersException {
-        if (this.coasters + coasters > MAXCOASTERS) {
+        if (this.coasters + coasters > Resources.getSystem().getInteger(R.integer.maxcoasters)) {
             throw new MaxCoastersException("The player can not have more than 13 coasters");
         }
         this.coasters += coasters;
@@ -164,7 +163,7 @@ public class PlayerImpl implements Player, GameSettings {
 
     @Override
     public void setCoasters(int coasters) throws MaxCoastersException {
-        if (coasters > MAXCOASTERS) {
+        if (coasters > Resources.getSystem().getInteger(R.integer.maxcoasters)) {
             throw new MaxCoastersException("The player can not have more than 13 coasters");
         }
         this.coasters = coasters;
@@ -218,7 +217,7 @@ public class PlayerImpl implements Player, GameSettings {
     @Override
     public void setMaxDiceThrows(int maxDiceThrows) throws MaxDiceThrowException {
         if(maxDiceThrows > 3 || maxDiceThrows < 1){
-            throw new MaxDiceThrowException("The player can only have maximal "+MAXDICETRHOWS+ "dice throws and can only have minimal 1 dice throws");
+            throw new MaxDiceThrowException("The player can only have maximal "+Resources.getSystem().getInteger(R.integer.maxdicethrows)+ "dice throws and can only have minimal 1 dice throws");
         }
         this.maxDiceThrows = maxDiceThrows;
     }
@@ -323,7 +322,7 @@ public class PlayerImpl implements Player, GameSettings {
      * @return True, if the player is able to call stay.
      */
     private boolean isAbleToCallStay() {
-        if (diceThrows > 0 && diceThrows < maxDiceThrows && dicesOut.size() != MAXDICESIZE) {
+        if (diceThrows > 0 && diceThrows < maxDiceThrows && dicesOut.size() != Resources.getSystem().getInteger(R.integer.maxdicesize)) {
             return true;
         }
         if(openTheCupCalled){
@@ -352,7 +351,7 @@ public class PlayerImpl implements Player, GameSettings {
      * @return True, if the player is able to call stay.
      */
     private boolean isAbleToOpenTheCup() {
-        if (diceThrows > 0 && dicesOut.size() != MAXDICESIZE && diceThrows == maxDiceThrows) {
+        if (diceThrows > 0 && dicesOut.size() != Resources.getSystem().getInteger(R.integer.maxdicesize) && diceThrows == maxDiceThrows) {
             return true;
         } else {
             return false;
