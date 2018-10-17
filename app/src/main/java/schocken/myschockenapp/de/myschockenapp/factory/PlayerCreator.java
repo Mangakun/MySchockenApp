@@ -5,8 +5,8 @@ import java.util.List;
 
 
 import schocken.myschockenapp.de.myschockenapp.observer.PlayerCallBack;
-import schocken.myschockenapp.de.myschockenapp.player.Player;
-import schocken.myschockenapp.de.myschockenapp.player.PlayerImpl.PlayerImpl;
+import schocken.myschockenapp.de.myschockenapp.player2.Player;
+import schocken.myschockenapp.de.myschockenapp.player2.PlayerImpl.PlayerImpl;
 
 public class PlayerCreator {
 

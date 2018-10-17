@@ -8,7 +8,7 @@ import schocken.myschockenapp.de.myschockenapp.dice.DiceValue;
 import schocken.myschockenapp.de.myschockenapp.dice.impl.DiceImpl;
 import schocken.myschockenapp.de.myschockenapp.factory.PlayerCreator;
 import schocken.myschockenapp.de.myschockenapp.observer.impl.GameObserver;
-import schocken.myschockenapp.de.myschockenapp.player.Player;
+import schocken.myschockenapp.de.myschockenapp.player2.Player;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;

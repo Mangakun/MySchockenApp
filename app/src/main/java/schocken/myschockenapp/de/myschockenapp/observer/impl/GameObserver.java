@@ -7,10 +7,10 @@ import schocken.myschockenapp.de.myschockenapp.factory.PlayerCreator;
 import schocken.myschockenapp.de.myschockenapp.observer.Observer;
 import schocken.myschockenapp.de.myschockenapp.observer.PlayerCallBack;
 import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlayerException;
-import schocken.myschockenapp.de.myschockenapp.player.Player;
-import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxCoastersException;
-import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxDiceThrowException;
-import schocken.myschockenapp.de.myschockenapp.player.exceptions.NotEnoughDicesOutException;
+import schocken.myschockenapp.de.myschockenapp.player2.Player;
+import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxCoastersException;
+import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxDiceThrowException;
+import schocken.myschockenapp.de.myschockenapp.player2.exceptions.NotEnoughDicesOutException;
 
 /**
  * Implementation class of the observer

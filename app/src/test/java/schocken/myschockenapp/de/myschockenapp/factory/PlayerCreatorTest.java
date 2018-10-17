@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import schocken.myschockenapp.de.myschockenapp.player.Player;
+import schocken.myschockenapp.de.myschockenapp.player2.Player;
 
 /**
  * This class tests the factory {@link PlayerCreator}.
