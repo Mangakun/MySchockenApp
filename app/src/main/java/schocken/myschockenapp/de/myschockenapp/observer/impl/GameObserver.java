@@ -3,6 +3,8 @@ package schocken.myschockenapp.de.myschockenapp.observer.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import schocken.myschockenapp.de.myschockenapp.domain.game.pojo.GamePojo;
+import schocken.myschockenapp.de.myschockenapp.domain.player.pojo.PlayerPojo;
 import schocken.myschockenapp.de.myschockenapp.factory.PlayerCreator;
 import schocken.myschockenapp.de.myschockenapp.observer.Observer;
 import schocken.myschockenapp.de.myschockenapp.observer.PlayerCallBack;
@@ -17,35 +19,7 @@ import schocken.myschockenapp.de.myschockenapp.player2.exceptions.NotEnoughDices
  */
 public class GameObserver implements Observer, PlayerCallBack {
 
-    /**
-     * A list of players.
-     */
-    private List<Player> players;
-
-    /**
-     * A list of current players.
-     */
-    private List<Player> currentPlayers;
-
-    /**
-     * The current player.
-     */
-    private Player currentPlayer;
-
-    /**
-     * The round starter.
-     */
-    private Player roundStarter;
-
-    /**
-     * The current best player.
-     */
-    private Player currentBestPlayer;
-
-    /**
-     * The current worst player.
-     */
-    private Player currentWorstPlayer;
+    private final GamePojo gamePojo;
 
     /**
      * The coasters stack
@@ -56,8 +30,7 @@ public class GameObserver implements Observer, PlayerCallBack {
      * Constructor of the class {@link GameObserver}.
      */
     public GameObserver() {
-        players = null;
-        currentPlayers = null;
+        gamePojo = new GamePojo();
         coasterStackObserver = new CoasterStackObserverImpl();
     }
 
@@ -68,13 +41,13 @@ public class GameObserver implements Observer, PlayerCallBack {
 //        /*
 //        Eine andere Möglichkeit wäre, dass jeder würfelt und
 //         */
-        currentPlayers.addAll(players);
+        gamePojo.getCurrentPlayers().addAll(gamePojo.getPlayers());
         // init players
-        for (Player player : currentPlayers) {
+        for (Player player : gamePojo.getCurrentPlayers()) {
             player.nextGame();
         }
         // set first player
-        roundStarter = players.get(0);
+        gamePojo.setRoundStarter(gamePojo.getPlayers().get(0));
         try {
             nextHalf();
         } catch (Exception e) {
@@ -86,7 +59,7 @@ public class GameObserver implements Observer, PlayerCallBack {
     public void nextHalf() throws Exception {
         System.out.println("Nächste Hälfte");
         // init players
-        for (Player player : currentPlayers) {
+        for (Player player : gamePojo.getCurrentPlayers()) {
             player.nextHalf();
         }
         coasterStackObserver.resetCoasters();
@@ -98,12 +71,12 @@ public class GameObserver implements Observer, PlayerCallBack {
         System.out.println("Nächste Runde");
         resetCurrentPlayers();
         // init players
-        for (Player player : players) {
+        for (Player player : gamePojo.getCurrentPlayers()) {
             player.nextRound();
         }
         // start with the game
-        currentPlayer = roundStarter;
-        currentPlayer.turn();
+        gamePojo.setCurrentPlayer(gamePojo.getRoundStarter());
+        gamePojo.getCurrentPlayer().turn();
     }
 
 
@@ -117,58 +90,42 @@ public class GameObserver implements Observer, PlayerCallBack {
             System.out.println("Game ist zuende");
         } else {
             if (coasterStackObserver.allHalfsDistributed()) {
-                currentPlayers.clear();
-                currentPlayers.add(coasterStackObserver.getFirstHalf());
-                currentPlayers.add(coasterStackObserver.getSecondHalf());
-                roundStarter = currentPlayers.get(0);
+                gamePojo.getCurrentPlayers().clear();
+                gamePojo.getCurrentPlayers().add(coasterStackObserver.getFirstHalf());
+                gamePojo.getCurrentPlayers().add(coasterStackObserver.getSecondHalf());
+                gamePojo.setRoundStarter(gamePojo.getCurrentPlayers().get(0));
                 // try {
                 //      nextHalf();
                 // } catch (Exception e) {
                 //     e.printStackTrace();
                 // }
             } else {
-                if(currentWorstPlayer.getCoasters() == 13){
-                    currentPlayers.clear();
-                    currentPlayers.addAll(players);
+                if(gamePojo.getCurrentWorstPlayer().getCoasters() == 13){
+                    gamePojo.getCurrentPlayers().clear();
+                    gamePojo.getCurrentPlayers().addAll(gamePojo.getPlayers());
                     // normal next round
                     //nextRound();
                 }else {
                     if (coasterStackObserver.coasterStackEmpty()) {
-                        currentPlayers.clear();
-                        for (Player player : players) {
+                        gamePojo.getCurrentPlayers().clear();
+                        for (Player player : gamePojo.getPlayers()) {
                             if (player.getCoasters() == 0) {
                                 continue;
                             }
-                            currentPlayers.add(player);
+                            gamePojo.getCurrentPlayers().add(player);
                         }
                     } else {
-                        currentPlayers.clear();
-                        currentPlayers.addAll(players);
+                        gamePojo.getCurrentPlayers().clear();
+                        gamePojo.getCurrentPlayers().addAll(gamePojo.getPlayers());
                         // normal next round
                         //nextRound();
                     }
                 }
-                this.roundStarter = currentWorstPlayer;
+                gamePojo.setRoundStarter(gamePojo.getCurrentWorstPlayer());
             }
 
         }
         // TODO: Presenter benachrichtigen
-    }
-
-
-    @Override
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-    @Override
-    public Player getCurrentWorstPlayer() {
-        return currentWorstPlayer;
-    }
-
-    @Override
-    public Player getCurrentBestPlayer() {
-        return currentBestPlayer;
     }
 
     @Override
@@ -177,36 +134,35 @@ public class GameObserver implements Observer, PlayerCallBack {
         if (playerNames.length < 2) {
             throw new NotEnoughPlayerException("There should be more than 2 players");
         }
-        players = PlayerCreator.getINSTANCE().createPlayers(playerNames, this);
+        gamePojo.setPlayers(PlayerCreator.getINSTANCE().createPlayers(playerNames, this));
         // check return from factory
-        if (players.size() < 2) {
+        if (gamePojo.getPlayers().size() < 2) {
             throw new NotEnoughPlayerException("There should be more than 2 players");
         }
-        currentPlayers = new ArrayList<>();
     }
 
     @Override
     public void callback(Player callbackPlayer, boolean finish) {
-        if (currentPlayer != callbackPlayer) {
+        if (gamePojo.getCurrentPlayer() != callbackPlayer) {
             throw new RuntimeException("Wrong player has called the callback");
         }
         if (finish) {
-            if (currentPlayer == roundStarter) {
+            if (gamePojo.getCurrentPlayer() == gamePojo.getRoundStarter()) {
                 // distribute max dice throws
-                distributeMaxDiceThrows(currentPlayer.getDiceThrows());
+                distributeMaxDiceThrows(gamePojo.getCurrentPlayer().getDiceThrows());
             }
             determineCurrentBestPlayer();
             determineCurrentWorstPlayer();
             // delete current player from list
-            int oldIndex = currentPlayers.indexOf(currentPlayer);
-            currentPlayers.remove(currentPlayer);
-            if (currentPlayers.size() <= 0) {
+            int oldIndex = gamePojo.getCurrentPlayers().indexOf(gamePojo.getCurrentPlayer());
+            gamePojo.getCurrentPlayers().remove( gamePojo.getCurrentPlayer());
+            if (gamePojo.getCurrentPlayers().size() <= 0) {
                 end();
             } else {
                 nextPlayer(oldIndex);
             }
         } else {
-            nextPlayer(currentPlayers.indexOf(currentPlayer) + 1);
+            nextPlayer(gamePojo.getCurrentPlayers().indexOf(gamePojo.getCurrentPlayer()) + 1);
         }
     }
 
@@ -217,7 +173,7 @@ public class GameObserver implements Observer, PlayerCallBack {
      * @param maxDiceThrows The new max dice throws.
      */
     private void distributeMaxDiceThrows(final int maxDiceThrows) {
-        for (final Player player : players) {
+        for (final Player player : gamePojo.getCurrentPlayers()) {
             try {
                 player.setMaxDiceThrows(maxDiceThrows);
             } catch (MaxDiceThrowException e) {
@@ -232,12 +188,12 @@ public class GameObserver implements Observer, PlayerCallBack {
      * @param index The index of the next player.
      */
     private void nextPlayer(final int index) {
-        if (index == currentPlayers.size()) {
-            currentPlayer = currentPlayers.get(0);
+        if (index == gamePojo.getCurrentPlayers().size()) {
+            gamePojo.setCurrentPlayer(gamePojo.getCurrentPlayers().get(0));
         } else {
-            currentPlayer = currentPlayers.get(index);
+            gamePojo.setCurrentPlayer(gamePojo.getCurrentPlayers().get(index));
         }
-        currentPlayer.turn();
+        gamePojo.getCurrentPlayer().turn();
     }
 
     /**
@@ -245,30 +201,30 @@ public class GameObserver implements Observer, PlayerCallBack {
      */
     private void determineCurrentWorstPlayer() {
         // not determined yet
-        if (currentWorstPlayer == null) {
-            currentWorstPlayer = currentPlayer;
+        if (gamePojo.getCurrentWorstPlayer() == null) {
+            gamePojo.setCurrentWorstPlayer(gamePojo.getCurrentPlayer());
         } else {
             int currentWorstPlayerDiceValue = -1;
             try {
-                currentWorstPlayerDiceValue = currentWorstPlayer.getDiceValueForCompare();
+                currentWorstPlayerDiceValue = gamePojo.getCurrentWorstPlayer().getDiceValueForCompare();
             } catch (NotEnoughDicesOutException e) {
                 // TODO ?
             }
             int currentPlayerDiceValue = -1;
             try {
-                currentPlayerDiceValue = currentPlayer.getDiceValueForCompare();
+                currentPlayerDiceValue = gamePojo.getCurrentPlayer().getDiceValueForCompare();
             } catch (NotEnoughDicesOutException e) {
                 // TODO ?
             }
             // worst dice value
             if (currentPlayerDiceValue < currentWorstPlayerDiceValue) {
-                currentWorstPlayer = currentPlayer;
+                gamePojo.setCurrentWorstPlayer(gamePojo.getCurrentPlayer());
             } else {
                 // same dice value
                 if (currentPlayerDiceValue == currentWorstPlayerDiceValue) {
                     // look for throws needed
-                    if (currentPlayer.getDiceThrows() > currentWorstPlayer.getDiceThrows()) {
-                        currentWorstPlayer = currentPlayer;
+                    if (gamePojo.getCurrentPlayer().getDiceThrows() > gamePojo.getCurrentWorstPlayer().getDiceThrows()) {
+                        gamePojo.setCurrentWorstPlayer(gamePojo.getCurrentPlayer());
                     }
                 }
             }
@@ -280,32 +236,33 @@ public class GameObserver implements Observer, PlayerCallBack {
      */
     private void determineCurrentBestPlayer() {
         // not determined yet
-        if (currentBestPlayer == null) {
-            currentBestPlayer = currentPlayer;
+        if (gamePojo.getCurrentBestPlayer() == null) {
+            gamePojo.setCurrentBestPlayer(gamePojo.getCurrentPlayer());
+
         } else {
             int currentBestPlayerDiceValue = -1;
             try {
-                currentBestPlayerDiceValue = currentBestPlayer.getDiceValueForCompare();
+                currentBestPlayerDiceValue = gamePojo.getCurrentBestPlayer().getDiceValueForCompare();
             } catch (NotEnoughDicesOutException e) {
                 e.printStackTrace();
                 // TODO ?
             }
             int currentPlayerDiceValue = -1;
             try {
-                currentPlayerDiceValue = currentPlayer.getDiceValueForCompare();
+                currentPlayerDiceValue = gamePojo.getCurrentPlayer().getDiceValueForCompare();
             } catch (NotEnoughDicesOutException e) {
                 e.printStackTrace();
                 // TODO ?
             }
             // worst dice value
             if (currentPlayerDiceValue > currentBestPlayerDiceValue) {
-                currentBestPlayer = currentPlayer;
+                gamePojo.setCurrentBestPlayer(gamePojo.getCurrentPlayer());
             } else {
                 // same dice value
                 if (currentPlayerDiceValue == currentBestPlayerDiceValue) {
                     // look for throws needed
-                    if (currentPlayer.getDiceThrows() < currentBestPlayer.getDiceThrows()) {
-                        currentBestPlayer = currentPlayer;
+                    if (gamePojo.getCurrentPlayer().getDiceThrows() < gamePojo.getCurrentBestPlayer().getDiceThrows()) {
+                        gamePojo.setCurrentBestPlayer(gamePojo.getCurrentPlayer());
                     }
                 }
             }
@@ -316,7 +273,7 @@ public class GameObserver implements Observer, PlayerCallBack {
      * This method distribute the coasters from the best to the worst player.
      */
     private void distributeCoasters() {
-        if (currentBestPlayer == currentWorstPlayer) {
+        if (gamePojo.getCurrentBestPlayer() == gamePojo.getCurrentWorstPlayer()) {
             try {
                 throw new Exception("The best player cant be the worst player at once !");
             } catch (Exception e) {
@@ -325,19 +282,19 @@ public class GameObserver implements Observer, PlayerCallBack {
         }
         int coasters = 0;
         try {
-            coasters = currentBestPlayer.getCoastersOfDiceValue();
+            coasters = gamePojo.getCurrentBestPlayer().getCoastersOfDiceValue();
         } catch (NotEnoughDicesOutException e) {
             e.printStackTrace();
         }
         if (coasters == 13) {
             try {
-                coasterStackObserver.takeAwayHalf(currentWorstPlayer);
+                coasterStackObserver.takeAwayHalf(gamePojo.getCurrentWorstPlayer());
             } catch (Exception e) {
                 e.printStackTrace();
             }
             // reset other players
-            for (final Player player : players) {
-                if (player != currentWorstPlayer) {
+            for (final Player player : gamePojo.getCurrentPlayers()) {
+                if (player != gamePojo.getCurrentWorstPlayer()) {
                     try {
                         player.setCoasters(0);
                     } catch (MaxCoastersException e) {
@@ -346,11 +303,11 @@ public class GameObserver implements Observer, PlayerCallBack {
                 }
             }
         } else {
-            if (!coasterStackObserver.takeAwayCoasters(coasters, currentWorstPlayer)) {
-                coasters = Math.min(currentBestPlayer.getCoasters(), coasters);
-                currentBestPlayer.removeCoasters(coasters);
+            if (!coasterStackObserver.takeAwayCoasters(coasters, gamePojo.getCurrentWorstPlayer())) {
+                coasters = Math.min(gamePojo.getCurrentBestPlayer().getCoasters(), coasters);
+                gamePojo.getCurrentBestPlayer().removeCoasters(coasters);
                 try {
-                    currentWorstPlayer.addCoasters(coasters);
+                    gamePojo.getCurrentWorstPlayer().addCoasters(coasters);
                 } catch (MaxCoastersException e) {
                     e.printStackTrace();
                 }
@@ -359,9 +316,9 @@ public class GameObserver implements Observer, PlayerCallBack {
     }
 
     private void resetCurrentPlayers() {
-        currentWorstPlayer = null;
-        currentBestPlayer = null;
-        currentPlayer = null;
+        gamePojo.setCurrentWorstPlayer(null);
+        gamePojo.setCurrentBestPlayer(null);
+        gamePojo.setCurrentPlayer(null);
     }
 
     private interface CoasterStackObserver {

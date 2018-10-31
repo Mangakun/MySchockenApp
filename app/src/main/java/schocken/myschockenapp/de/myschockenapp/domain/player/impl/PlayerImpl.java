@@ -3,7 +3,7 @@ package schocken.myschockenapp.de.myschockenapp.domain.player.impl;
 import android.content.res.Resources;
 
 import schocken.myschockenapp.de.myschockenapp.R;
-import schocken.myschockenapp.de.myschockenapp.domain.Player;
+import schocken.myschockenapp.de.myschockenapp.domain.player.Player;
 import schocken.myschockenapp.de.myschockenapp.domain.player.pojo.PlayerPojo;
 import schocken.myschockenapp.de.myschockenapp.player2.exceptions.PlayerActionNotAllowedException;
 
@@ -15,13 +15,11 @@ public class PlayerImpl implements Player {
         this.playerPojo = new PlayerPojo();
     }
 
-
-
     @Override
     public void stay() throws PlayerActionNotAllowedException {
         if (isAbleToCallStay()) {
-            dicesOut.addAll(dicesIn);
-            dicesIn.clear();
+            playerPojo.getDicesOut().addAll(playerPojo.getDicesIn());
+            playerPojo.getDicesIn().clear();
             if(callback != null) {
                 this.callback.callback(this,true); // all dices are out
             }
@@ -34,11 +32,11 @@ public class PlayerImpl implements Player {
     public void rollTheDice() throws PlayerActionNotAllowedException {
         // check if the player is able to roll the dices
         if (isAbleToRollTheDices()) {
-            ++diceThrows;
-            for (int i = 0; i < dicesIn.size(); ++i) {
-                dicesIn.get(i).roll();
+            playerPojo.setDiceThrows(playerPojo.getDiceThrows()+1);
+            for (int i = 0; i < playerPojo.getDicesIn().size(); ++i) {
+                playerPojo.getDicesIn().get(i).roll();
             }
-            if (diceThrows == maxDiceThrows) {
+            if (playerPojo.getDiceThrows() == playerPojo.getMaxDiceThrows()) {
                 if(callback != null){
                     callback.callback(this,false); // because not all dices are out
                 }
@@ -56,6 +54,11 @@ public class PlayerImpl implements Player {
         } else {
             throw new PlayerActionNotAllowedException("The player is not allowed to open the cup");
         }
+    }
+
+    @Override
+    public void turn() {
+
     }
 
 

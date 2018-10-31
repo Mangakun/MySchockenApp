@@ -1,4 +1,4 @@
-package schocken.myschockenapp.de.myschockenapp.player2;
+package schocken.myschockenapp.de.myschockenapp.domain.player;
 
 
 import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxCoastersException;

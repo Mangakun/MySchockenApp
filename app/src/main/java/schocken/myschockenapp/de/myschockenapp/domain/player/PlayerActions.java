@@ -1,8 +1,13 @@
-package schocken.myschockenapp.de.myschockenapp.domain;
+package schocken.myschockenapp.de.myschockenapp.domain.player;
+
 
 import schocken.myschockenapp.de.myschockenapp.player2.exceptions.PlayerActionNotAllowedException;
 
-public interface Player {
+/**
+ * This interface contains all player actions which are allowed.
+ */
+
+public interface PlayerActions {
 
     /**
      * The player finishes his round.
@@ -27,3 +32,5 @@ public interface Player {
      */
     void turn();
 }
+
+

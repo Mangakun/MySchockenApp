@@ -3,9 +3,8 @@ package schocken.myschockenapp.de.myschockenapp.domain.player.pojo;
 import java.util.List;
 
 import schocken.myschockenapp.de.myschockenapp.dice.Dice;
-import schocken.myschockenapp.de.myschockenapp.player2.dm.PlayerDM;
 
-public class PlayerPojo implements PlayerDM {
+public class PlayerPojo {
 
     /**
      * The name of the player.

@@ -24,24 +24,6 @@ public interface Observer {
     void nextRound();
 
     /**
-     * This method returns the current player.
-     * @return An object of the class {@link Player}.
-     */
-    Player getCurrentPlayer();
-
-    /**
-     * This method returns the current worst player.
-     * @return An object of the class {@link Player}.
-     */
-    Player getCurrentWorstPlayer();
-
-    /**
-     * This method returns the current best player.
-     * @return An object of the class {@link Player}.
-     */
-    Player getCurrentBestPlayer();
-
-    /**
      * This method creates the player of the game.
      * @param playerNames An array of player names.
      */
