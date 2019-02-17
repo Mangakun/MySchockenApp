@@ -9,8 +9,10 @@ import java.util.List;
 
 import schocken.myschockenapp.de.myschockenapp.dice.DiceValue;
 import schocken.myschockenapp.de.myschockenapp.dice.impl.DiceImpl;
-import schocken.myschockenapp.de.myschockenapp.player2.PlayerImpl.PlayerImpl;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.NotEnoughDicesOutException;
+import schocken.myschockenapp.de.myschockenapp.player.Player;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.NotEnoughDicesOutException;
+import schocken.myschockenapp.de.myschockenapp.player.impl.PlayerImpl;
+
 
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -48,7 +50,7 @@ public class PlayerCoasterOfDiceValueTest {
 //        }
 
         // mock player
-        Player player = spy(new PlayerImpl(null,null));
+        Player player = spy(new PlayerImpl(null,null,null));
         when(player.getDicesValuesOut()).thenReturn(list);
         // Test output
 //        List<DiceValue> listTMp = player.getDicesValuesOut();
@@ -80,7 +82,7 @@ public class PlayerCoasterOfDiceValueTest {
         list.add(value2);
         list.add(value3);
         // mock player
-        Player player = spy(new PlayerImpl(null,null));
+        Player player = spy(new PlayerImpl(null,null,null));
         when(player.getDicesValuesOut()).thenReturn(list);
         try {
             Assert.assertEquals("Es wird eine 2 erwartet",2,player.getCoastersOfDiceValue());
@@ -106,7 +108,7 @@ public class PlayerCoasterOfDiceValueTest {
         list.add(value2);
         list.add(value3);
         // mock player
-        Player player = spy(new PlayerImpl(null,null));
+        Player player = spy(new PlayerImpl(null,null,null));
         when(player.getDicesValuesOut()).thenReturn(list);
         try {
             Assert.assertEquals("Es wird eine 5 erwartet",5,player.getCoastersOfDiceValue());
@@ -132,7 +134,7 @@ public class PlayerCoasterOfDiceValueTest {
         list.add(value2);
         list.add(value3);
         // mock player
-        Player player = spy(new PlayerImpl(null,null));
+        Player player = spy(new PlayerImpl(null,null,null));
         when(player.getDicesValuesOut()).thenReturn(list);
         try {
             Assert.assertEquals("Es wird eine 13 erwartet",13,player.getCoastersOfDiceValue());
@@ -158,7 +160,7 @@ public class PlayerCoasterOfDiceValueTest {
         list.add(value2);
         list.add(value3);
         // mock player
-        Player player = spy(new PlayerImpl(null,null));
+        Player player = spy(new PlayerImpl(null,null,null));
         when(player.getDicesValuesOut()).thenReturn(list);
         try {
             Assert.assertEquals("Es wird eine 3 erwartet",3,player.getCoastersOfDiceValue());
@@ -184,7 +186,7 @@ public class PlayerCoasterOfDiceValueTest {
         list.add(value2);
         list.add(value3);
         // mock player
-        Player player = spy(new PlayerImpl(null,null));
+        Player player = spy(new PlayerImpl(null,null,null));
         when(player.getDicesValuesOut()).thenReturn(list);
         try {
             Assert.assertEquals("Es wird eine 3 erwartet",3,player.getCoastersOfDiceValue());
@@ -210,7 +212,7 @@ public class PlayerCoasterOfDiceValueTest {
         list.add(value2);
         list.add(value3);
         // mock player
-        Player player = spy(new PlayerImpl(null,null));
+        Player player = spy(new PlayerImpl(null,null,null));
         when(player.getDicesValuesOut()).thenReturn(list);
         try {
             Assert.assertEquals("Es wird eine 1 erwartet",1, player.getCoastersOfDiceValue());

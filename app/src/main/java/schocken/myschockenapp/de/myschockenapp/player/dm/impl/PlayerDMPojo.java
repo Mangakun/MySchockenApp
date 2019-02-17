@@ -1,10 +1,11 @@
-package schocken.myschockenapp.de.myschockenapp.domain.player.pojo;
+package schocken.myschockenapp.de.myschockenapp.player.dm.impl;
 
 import java.util.List;
 
 import schocken.myschockenapp.de.myschockenapp.dice.Dice;
+import schocken.myschockenapp.de.myschockenapp.player.dm.PlayerDM;
 
-public class PlayerPojo {
+public class PlayerDMPojo implements PlayerDM {
 
     /**
      * The name of the player.
@@ -48,10 +49,9 @@ public class PlayerPojo {
     private boolean openTheCupCalled;
 
 
-    public PlayerPojo(){
+    public PlayerDMPojo(){
 
     }
-
 
     public String getPlayerName() {
         return playerName;
@@ -116,4 +116,6 @@ public class PlayerPojo {
     public void setOpenTheCupCalled(boolean openTheCupCalled) {
         this.openTheCupCalled = openTheCupCalled;
     }
+
+
 }

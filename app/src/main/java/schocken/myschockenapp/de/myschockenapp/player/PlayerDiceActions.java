@@ -1,9 +1,9 @@
-package schocken.myschockenapp.de.myschockenapp.domain.player;
+package schocken.myschockenapp.de.myschockenapp.player;
 
 import java.util.List;
 
 import schocken.myschockenapp.de.myschockenapp.dice.DiceValue;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.DiceNotFoundException;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.DiceNotFoundException;
 
 /**
  * This interface contains all methods for dice actions.

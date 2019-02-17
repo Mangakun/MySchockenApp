@@ -1,10 +1,10 @@
-package schocken.myschockenapp.de.myschockenapp.domain.player;
+package schocken.myschockenapp.de.myschockenapp.player;
 
 
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxCoastersException;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxDiceThrowException;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxHalfException;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.NotEnoughDicesOutException;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxCoastersException;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxDiceThrowException;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxHalfException;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.NotEnoughDicesOutException;
 
 /**
  * This interface is an extension of the interface {@link PlayerActions}.

@@ -5,9 +5,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxDiceThrowException;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.PlayerActionNotAllowedException;
-
 /**
  * This class tests the function "setMaxDiceThrows".
  */

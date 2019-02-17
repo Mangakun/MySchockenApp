@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import schocken.myschockenapp.de.myschockenapp.player.Player;
 import schocken.myschockenapp.de.myschockenapp.observer.PlayerCallBack;
-import schocken.myschockenapp.de.myschockenapp.player2.Player;
-import schocken.myschockenapp.de.myschockenapp.player2.PlayerImpl.PlayerImpl;
+import schocken.myschockenapp.de.myschockenapp.player.dm.PlayerDM;
+import schocken.myschockenapp.de.myschockenapp.player.impl.PlayerImpl;
+
 
 public class PlayerCreator {
 
@@ -28,10 +30,10 @@ public class PlayerCreator {
      * @param playerCallback An object of the class {@link PlayerCallBack}.
      * @return A list of players.
      */
-    public List<Player> createPlayers(final String[] playersNames, final PlayerCallBack playerCallback){
+    public List<Player> createPlayers(final String[] playersNames, final PlayerCallBack playerCallback, PlayerDM playerDM){
         List<Player> players = new ArrayList<>();
         for(String playerName : playersNames){
-            final Player player = new PlayerImpl(playerName,playerCallback);
+            final Player player = new PlayerImpl(playerName,playerCallback,playerDM);
              players.add(player);
         }
          return players;

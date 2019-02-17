@@ -5,8 +5,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxCoastersException;
-
 /**
  * This class tests the functions "getCoasters", "setCoasters" and "addCoasters".
  */

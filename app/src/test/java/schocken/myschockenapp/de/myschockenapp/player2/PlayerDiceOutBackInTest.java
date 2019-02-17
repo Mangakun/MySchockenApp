@@ -11,8 +11,6 @@ import java.util.Random;
 
 import schocken.myschockenapp.de.myschockenapp.dice.DiceValue;
 import schocken.myschockenapp.de.myschockenapp.player2.PlayerImpl.PlayerImpl;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.DiceNotFoundException;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.PlayerActionNotAllowedException;
 
 import static org.mockito.Mockito.spy;
 

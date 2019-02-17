@@ -4,10 +4,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxCoastersException;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxHalfException;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.PlayerActionNotAllowedException;
-
 /**
  * This method tests the player action "blind".
  * Created by Snaki on 18.11.2017.

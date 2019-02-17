@@ -1,7 +1,8 @@
 package schocken.myschockenapp.de.myschockenapp.observer;
 
 
-import schocken.myschockenapp.de.myschockenapp.player2.Player;
+import schocken.myschockenapp.de.myschockenapp.player.Player;
+
 
 /**
  * An interface of a player callback.

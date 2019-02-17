@@ -2,7 +2,8 @@ package schocken.myschockenapp.de.myschockenapp.domain.game.pojo;
 
 import java.util.List;
 
-import schocken.myschockenapp.de.myschockenapp.player2.Player;
+import schocken.myschockenapp.de.myschockenapp.player.Player;
+
 
 public class GamePojo {
 

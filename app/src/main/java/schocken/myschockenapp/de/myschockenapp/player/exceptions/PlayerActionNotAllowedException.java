@@ -1,4 +1,4 @@
-package schocken.myschockenapp.de.myschockenapp.player2.exceptions;
+package schocken.myschockenapp.de.myschockenapp.player.exceptions;
 
 /**
  * This class is an extension of an {@link Exception}.

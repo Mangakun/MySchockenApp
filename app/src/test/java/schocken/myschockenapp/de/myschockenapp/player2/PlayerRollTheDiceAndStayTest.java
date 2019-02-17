@@ -4,8 +4,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.PlayerActionNotAllowedException;
-
 
 /**
  * This class tests the player actions "roll the dice" and stay.

@@ -1,18 +1,14 @@
 package schocken.myschockenapp.de.myschockenapp.observer.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import schocken.myschockenapp.de.myschockenapp.domain.game.pojo.GamePojo;
-import schocken.myschockenapp.de.myschockenapp.domain.player.pojo.PlayerPojo;
+import schocken.myschockenapp.de.myschockenapp.player.Player;
 import schocken.myschockenapp.de.myschockenapp.factory.PlayerCreator;
 import schocken.myschockenapp.de.myschockenapp.observer.Observer;
 import schocken.myschockenapp.de.myschockenapp.observer.PlayerCallBack;
 import schocken.myschockenapp.de.myschockenapp.observer.exceptions.NotEnoughPlayerException;
-import schocken.myschockenapp.de.myschockenapp.player2.Player;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxCoastersException;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.MaxDiceThrowException;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.NotEnoughDicesOutException;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxCoastersException;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.MaxDiceThrowException;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.NotEnoughDicesOutException;
 
 /**
  * Implementation class of the observer
@@ -134,7 +130,7 @@ public class GameObserver implements Observer, PlayerCallBack {
         if (playerNames.length < 2) {
             throw new NotEnoughPlayerException("There should be more than 2 players");
         }
-        gamePojo.setPlayers(PlayerCreator.getINSTANCE().createPlayers(playerNames, this));
+        gamePojo.setPlayers(PlayerCreator.getINSTANCE().createPlayers(playerNames, this,null));
         // check return from factory
         if (gamePojo.getPlayers().size() < 2) {
             throw new NotEnoughPlayerException("There should be more than 2 players");

@@ -1,4 +1,4 @@
-package schocken.myschockenapp.de.myschockenapp.player2.exceptions;
+package schocken.myschockenapp.de.myschockenapp.player.exceptions;
 
 
 public class MaxCoastersException extends Exception {

@@ -4,8 +4,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.PlayerActionNotAllowedException;
-
 
 /**
  * This class is an extension of the {@link PlayerTest} class.

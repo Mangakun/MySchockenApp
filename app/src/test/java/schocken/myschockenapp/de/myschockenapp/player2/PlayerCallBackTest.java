@@ -5,8 +5,9 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import schocken.myschockenapp.de.myschockenapp.observer.PlayerCallBack;
-import schocken.myschockenapp.de.myschockenapp.player2.PlayerImpl.PlayerImpl;
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.PlayerActionNotAllowedException;
+import schocken.myschockenapp.de.myschockenapp.player.Player;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.PlayerActionNotAllowedException;
+import schocken.myschockenapp.de.myschockenapp.player.impl.PlayerImpl;
 
 import static org.mockito.Mockito.spy;
 
@@ -26,7 +27,7 @@ public class PlayerCallBackTest {
             public void callback(Player callBackPlayer, boolean finish) {
                 Assert.assertEquals("Finish should be true",finish ,true);
             }
-        }));
+        },null));
         try {
             player.rollTheDice();
         } catch (PlayerActionNotAllowedException e) {
@@ -49,7 +50,7 @@ public class PlayerCallBackTest {
             public void callback(Player callBackPlayer, boolean finish) {
                 Assert.assertEquals("Finish should be true",finish ,true);
             }
-        }));
+        },null));
         try {
             player.rollTheDice();
         } catch (PlayerActionNotAllowedException e) {
@@ -76,7 +77,7 @@ public class PlayerCallBackTest {
             public void callback(Player callbackPlayer, boolean finish) {
                 Assert.assertEquals("Finish should be true",finish ,false);
             }
-        }));
+        },null));
         try {
             player.rollTheDice();
         } catch (PlayerActionNotAllowedException e) {

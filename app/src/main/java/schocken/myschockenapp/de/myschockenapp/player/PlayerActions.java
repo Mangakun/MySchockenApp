@@ -1,7 +1,7 @@
-package schocken.myschockenapp.de.myschockenapp.domain.player;
+package schocken.myschockenapp.de.myschockenapp.player;
 
 
-import schocken.myschockenapp.de.myschockenapp.player2.exceptions.PlayerActionNotAllowedException;
+import schocken.myschockenapp.de.myschockenapp.player.exceptions.PlayerActionNotAllowedException;
 
 /**
  * This interface contains all player actions which are allowed.
