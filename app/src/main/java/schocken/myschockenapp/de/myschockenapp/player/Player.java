@@ -26,4 +26,10 @@ public interface Player  extends PlayerActions, PlayerGameActions, PlayerDiceAct
      * The players turn.
      */
     void turn();
+
+    /**
+          * This method return the name of the player.
+          * @return The name of the player.
+          */
+    String getName();
 }

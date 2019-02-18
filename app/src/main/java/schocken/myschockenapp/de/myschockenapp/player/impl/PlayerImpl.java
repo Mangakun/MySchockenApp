@@ -32,13 +32,6 @@ public class PlayerImpl implements Player {
      */
     private PlayerCallBack callback;
 
-    public PlayerImpl(final String playerName){
-        this(playerName,null,null);
-    }
-
-    public PlayerImpl(final String playerName,final PlayerCallBack callBack){
-        this(playerName,callBack,null);
-    }
 
     public PlayerImpl(final String playerName, final PlayerCallBack callBack, final PlayerDM playerDM){
         this.playerDM = playerDM;
@@ -90,6 +83,11 @@ public class PlayerImpl implements Player {
     @Override
     public void turn() {
 
+    }
+
+    @Override
+    public String getName() {
+        return playerDM.getPlayerName();
     }
 
 
