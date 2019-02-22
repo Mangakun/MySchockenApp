@@ -33,7 +33,8 @@ public class PlayerCreator {
     public List<Player> createPlayers(final String[] playersNames, final PlayerCallBack playerCallback, PlayerDM playerDM){
         List<Player> players = new ArrayList<>();
         for(String playerName : playersNames){
-            final Player player = new PlayerImpl(playerName,playerCallback,playerDM);
+            final Player player = new PlayerImpl(playerCallback,playerDM);
+            player.setName(playerName);
              players.add(player);
         }
          return players;

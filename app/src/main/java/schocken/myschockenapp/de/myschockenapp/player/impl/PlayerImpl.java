@@ -25,7 +25,7 @@ public class PlayerImpl implements Player {
     /**
      * An object of the class {@link PlayerDMPojo}.
      */
-    private final PlayerDM playerDM;
+    PlayerDM playerDM;
 
     /**
      * An object of the class {@link PlayerCallBack}.
@@ -33,9 +33,8 @@ public class PlayerImpl implements Player {
     private PlayerCallBack callback;
 
 
-    public PlayerImpl(final String playerName, final PlayerCallBack callBack, final PlayerDM playerDM){
+    public PlayerImpl(final PlayerCallBack callBack, final PlayerDM playerDM){
         this.playerDM = playerDM;
-        this.playerDM.setPlayerName(playerName);
         this.callback = callBack;
     }
 
@@ -88,6 +87,11 @@ public class PlayerImpl implements Player {
     @Override
     public String getName() {
         return playerDM.getPlayerName();
+    }
+
+    @Override
+    public void setName(String playerName) {
+        playerDM.setPlayerName(playerName);
     }
 
 

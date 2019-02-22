@@ -39,7 +39,8 @@ public class PlayerTest {
     public void createPlayers() {
         players = new ArrayList<>();
         for (final String playerName : playerNames) {
-            final Player player = new PlayerImpl(playerName,null,new PlayerDMPojo());
+            final Player player = new PlayerImpl(null,new PlayerDMPojo());
+            player.setName(playerName);
             players.add(player);
         }
     }

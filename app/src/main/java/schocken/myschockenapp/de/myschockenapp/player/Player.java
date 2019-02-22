@@ -32,4 +32,9 @@ public interface Player  extends PlayerActions, PlayerGameActions, PlayerDiceAct
           * @return The name of the player.
           */
     String getName();
+
+    /**
+     *
+     */
+    void setName(String playerName);
 }
